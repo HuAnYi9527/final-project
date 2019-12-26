@@ -27,7 +27,7 @@ class PlotData:
         self.filtered = signal.lfilter(kernel, 1, self.axis_y)
 
 #initial
-HRV = deque(maxlen= 200)
+HRV = deque(maxlen= 100)
 kernel = [1/6, 1/6, 1/6, 1/6, 1/6, 1/6] 
 angle = np.linspace(-np.pi, np.pi, 50)
 cirx = np.sin(angle)
@@ -105,8 +105,9 @@ while True:
     try:
         dd = index_extr[4] - index_extr[3]
         HRV.append((60/(dd*0.01)))
-        print('即時心率 %f (次／min)' %(60/(dd*0.01)))
-        HRV.append((60/(dd*0.01)))
+        HRV_Var = statistics.variance(HRV)
+        print('即時心率 %f (次／min) \t HRV = %f' %((60/(dd*0.01)),HRV_Var))
+        
     except:
         pass
 
@@ -127,3 +128,4 @@ while True:
 
     fig.canvas.draw()
     fig.canvas.flush_events()
+
